@@ -1,0 +1,8 @@
+- hosts: debian
+#  serial: 10
+  tasks:
+    - name: Upgrade Debian OS
+      apt:
+        upgrade: yes
+        update_cache: yes
+

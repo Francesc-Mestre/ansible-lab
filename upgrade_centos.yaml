@@ -1,0 +1,5 @@
+- hosts: centos
+#  serial: 10
+  tasks:
+    - name: Upgrade Centos OS
+      yum: name=* update_only=yes update_cache=yes

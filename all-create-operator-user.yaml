@@ -1,0 +1,33 @@
+- hosts: all
+  #sudo: true
+  vars:
+    users:
+    - "operador"
+  tasks:
+  - name: "crear grupo operador"
+    become: yes 
+    group:
+      name: operador
+      state: present
+
+  - name: "Create user accounts"
+    user:
+      name: "{{ item }}"
+      groups: "operador"
+    with_items: "{{ users }}"
+    become: yes
+
+  - name: "Add authorized keys"
+    authorized_key:
+      user: "{{ item }}"
+      key: "{{ lookup('file', '/home/devops/.ssh/id_ed25519.pub') }}"
+      #key: "{{ lookup('file', 'files/'+ item + '.pub') }}"    #   files/operador1.pub files/operador2.pub ...
+    with_items: "{{ users }}"
+    become: yes
+  - name: "Allow admin users to sudo without a password"
+    lineinfile:
+      dest: "/etc/sudoers"
+      state: "present"
+      regexp: "^%operador"
+      line: "%operador ALL=(ALL) NOPASSWD: ALL"
+      become: yes

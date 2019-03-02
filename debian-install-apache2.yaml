@@ -1,0 +1,13 @@
+- hosts: debian
+#  serial: 10
+  tasks:
+    - name: Install apache httpd but avoid starting it immediately (state=present is optional)
+      apt:
+        name: apache2
+        state: present
+        become: true
+    - name: Install PHP
+      apt:
+        name: libapache2-mod-php
+        state: present
+        become: true 
